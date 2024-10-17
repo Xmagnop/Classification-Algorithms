@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='styles.css') }}"
+		/>
+		<title>Segmentação de Clientes</title>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Escolha seus Produtos</h1>
+			<form id="product-form">
+				<label for="produtos">Selecione os produtos:</label><br />
+				<select id="produtos" multiple>
+					<option value="Mouse">Mouse</option>
+					<option value="Teclado">Teclado</option>
+					<option value="Cadeira">Cadeira</option>
+					<option value="Monitor">Monitor</option>
+					<option value="Placa de Vídeo">Placa de Vídeo</option>
+					<option value="Headset">Headset</option>
+					<option value="Microfone">Microfone</option>
+					<option value="Mesa Gamer">Mesa Gamer</option>
+					<option value="Cabo HDMI">Cabo HDMI</option>
+					<option value="Webcam">Webcam</option></select
+				><br /><br />
+				<button type="submit">Realizar Compra</button>
+			</form>
+			<div id="result"></div>
+		</div>
+		<script>
+			document.getElementById("product-form").onsubmit = async (event) => {
+				event.preventDefault();
+				const produtosSelecionados = Array.from(
+					document.getElementById("produtos").selectedOptions
+				).map((option) => option.value);
+
+				const response = await fetch("/segmentar", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ produtos: produtosSelecionados }),
+				});
+
+				const data = await response.json();
+				document.getElementById(
+					"result"
+				).innerText = `Segmento do Cliente: ${data.segmento}`;
+			};
+		</script>
+	</body>
+</html>
