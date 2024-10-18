@@ -1,36 +1,35 @@
-import numpy as np
 import pandas as pd
+import numpy as np
+from skfuzzy.cluster import cmeans
 from sklearn.preprocessing import StandardScaler
-from skfuzzy import cmeans
+import pickle
 
-# Nome dos produtos e seus segmentos correspondentes
-produtos = [
-    'Mouse', 'Teclado', 'Cadeira', 'Monitor', 'Placa de Vídeo',
-    'Headset', 'Microfone', 'Mesa Gamer', 'Cabo HDMI', 'Webcam'
-]
+# Leitura de dados a partir de um CSV de compras
 
-# Simulação de dados de treinamento com segmentos associados
-dados = {
-    'Mouse': [1, 0, 0, 0, 0],
-    'Teclado': [1, 0, 0, 0, 0],
-    'Cadeira': [1, 1, 0, 0, 0],
-    'Monitor': [1, 1, 1, 0, 0],
-    'Placa de Vídeo': [0, 1, 0, 1, 0],
-    'Headset': [0, 1, 1, 1, 0],
-    'Microfone': [0, 0, 1, 1, 1],
-    'Mesa Gamer': [0, 0, 1, 1, 1],
-    'Cabo HDMI': [0, 0, 0, 0, 1],
-    'Webcam': [0, 0, 0, 0, 1],
-}
 
-data = pd.DataFrame.from_dict(dados, orient='index')
-scaler = StandardScaler()
-scaled_data = scaler.fit_transform(data)
+def load_data(filepath):
+  data = pd.read_csv(filepath)
+  return data
 
-num_clusters = 5
-cntr, u, u0, d, jm, p, fpc = cmeans(scaled_data.T, num_clusters, 2, error=0.005, maxiter=1000)
+# Treinamento do modelo Fuzzy C-means
 
-# Salvar o modelo treinado
-np.savez('modelo_fuzzy_cmeans.npz', cntr=cntr)
 
-print("Modelo treinado e salvo com sucesso!")
+def train_fuzzy_cmeans(data):
+  scaler = StandardScaler()
+  scaled_data = scaler.fit_transform(data)
+
+  num_clusters = 5  # Definindo 5 clusters, por exemplo
+  cntr, u, u0, d, jm, p, fpc = cmeans(
+      scaled_data.T, num_clusters, 2, error=0.005, maxiter=1000)
+
+  # Salvando o modelo e o scaler
+  with open('clustering/fcm_model.pkl', 'wb') as f:
+    pickle.dump((cntr, scaler), f)
+
+  print("Modelo Fuzzy C-means treinado e salvo.")
+
+
+if __name__ == '__main__':
+  filepath = 'data/compras.csv'
+  data = load_data(filepath)
+  train_fuzzy_cmeans(data)

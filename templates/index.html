@@ -1,55 +1,129 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link
-			rel="stylesheet"
-			href="{{ url_for('static', filename='styles.css') }}"
-		/>
-		<title>Segmentação de Clientes</title>
-	</head>
-	<body>
-		<div class="container">
-			<h1>Escolha seus Produtos</h1>
-			<form id="product-form">
-				<label for="produtos">Selecione os produtos:</label><br />
-				<select id="produtos" multiple>
-					<option value="Mouse">Mouse</option>
-					<option value="Teclado">Teclado</option>
-					<option value="Cadeira">Cadeira</option>
-					<option value="Monitor">Monitor</option>
-					<option value="Placa de Vídeo">Placa de Vídeo</option>
-					<option value="Headset">Headset</option>
-					<option value="Microfone">Microfone</option>
-					<option value="Mesa Gamer">Mesa Gamer</option>
-					<option value="Cabo HDMI">Cabo HDMI</option>
-					<option value="Webcam">Webcam</option></select
-				><br /><br />
-				<button type="submit">Realizar Compra</button>
-			</form>
-			<div id="result"></div>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Carrinho de Compras</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	<script>
+		let cart = {};
+
+		function addToCart(productId, productName) {
+			if (cart[productId]) {
+				cart[productId].quantity += 1;
+			} else {
+				cart[productId] = { name: productName, quantity: 1 };
+			}
+			updateCart();
+		}
+
+		function removeFromCart(productId) {
+			if (cart[productId]) {
+				cart[productId].quantity -= 1;
+				if (cart[productId].quantity === 0) {
+					delete cart[productId];
+				}
+			}
+			updateCart();
+		}
+
+		function updateCart() {
+			const cartContainer = document.getElementById("cart-items");
+			cartContainer.innerHTML = '';
+
+			for (const productId in cart) {
+				const item = cart[productId];
+				const itemElement = document.createElement("div");
+				itemElement.classList.add("cart-item");
+				itemElement.innerHTML = `
+                    <span>${item.name} (x${item.quantity})</span>
+                    <button onclick="removeFromCart(${productId})">Remover</button>
+                `;
+				cartContainer.appendChild(itemElement);
+			}
+
+			if (Object.keys(cart).length === 0) {
+				cartContainer.innerHTML = '<p>Carrinho vazio</p>';
+			}
+		}
+
+		function finalizarCompra() {
+			const produtos = [];
+			for (const productId in cart) {
+				for (let i = 0; i < cart[productId].quantity; i++) {
+					produtos.push(productId);
+				}
+			}
+
+			fetch('/segmentar', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ produtos: produtos }),
+			})
+				.then(response => response.json())
+				.then(data => {
+					alert(`Segmento: ${data.segmento}`);
+				})
+				.catch(error => console.error('Error:', error));
+		}
+	</script>
+</head>
+
+<body>
+	<div class="catalog">
+		<h2>Catálogo de Produtos</h2>
+		<div class="product" id="product-1">
+			<span>Mouse</span>
+			<button onclick="addToCart(1, 'Mouse')">Adicionar ao Carrinho</button>
 		</div>
-		<script>
-			document.getElementById("product-form").onsubmit = async (event) => {
-				event.preventDefault();
-				const produtosSelecionados = Array.from(
-					document.getElementById("produtos").selectedOptions
-				).map((option) => option.value);
+		<div class="product" id="product-2">
+			<span>Teclado</span>
+			<button onclick="addToCart(2, 'Teclado')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-3">
+			<span>Cadeira</span>
+			<button onclick="addToCart(3, 'Cadeira')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-4">
+			<span>Monitor</span>
+			<button onclick="addToCart(4, 'Monitor')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-5">
+			<span>Headset</span>
+			<button onclick="addToCart(5, 'Headset')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-6">
+			<span>Caixa de Som</span>
+			<button onclick="addToCart(6, 'Caixa de Som')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-7">
+			<span>Impressora</span>
+			<button onclick="addToCart(7, 'Impressora')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-8">
+			<span>Notebook</span>
+			<button onclick="addToCart(8, 'Notebook')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-9">
+			<span>PC Gamer</span>
+			<button onclick="addToCart(9, 'PC Gamer')">Adicionar ao Carrinho</button>
+		</div>
+		<div class="product" id="product-10">
+			<span>Placa de Vídeo</span>
+			<button onclick="addToCart(10, 'Placa de Vídeo')">Adicionar ao Carrinho</button>
+		</div>
+	</div>
 
-				const response = await fetch("/segmentar", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ produtos: produtosSelecionados }),
-				});
+	<div class="cart">
+		<h2>Carrinho de Compras</h2>
+		<div id="cart-items">
+			<p>Carrinho vazio</p>
+		</div>
+		<button onclick="finalizarCompra()">Finalizar Compra</button>
+	</div>
+</body>
 
-				const data = await response.json();
-				document.getElementById(
-					"result"
-				).innerText = `Segmento do Cliente: ${data.segmento}`;
-			};
-		</script>
-	</body>
 </html>

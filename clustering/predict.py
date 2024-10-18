@@ -1,31 +1,35 @@
 import numpy as np
-import pandas as pd
+import pickle
 from sklearn.preprocessing import StandardScaler
 
-# Carregar o modelo treinado
-modelo = np.load('modelo_fuzzy_cmeans.npz')
-centros = modelo['cntr']
+# Função para carregar o modelo treinado (centros dos clusters) e o scaler
 
-# Nome dos produtos e seus segmentos correspondentes
-produtos = [
-    'Mouse', 'Teclado', 'Cadeira', 'Monitor', 'Placa de Vídeo',
-    'Headset', 'Microfone', 'Mesa Gamer', 'Cabo HDMI', 'Webcam'
-]
 
-def predict_segment(produtos_compra):
-    data = np.zeros((1, len(produtos)))
-    
-    for produto in produtos_compra:
-        if produto in produtos:
-            idx = produtos.index(produto)
-            data[0, idx] = 1
-            
-    scaled_data = StandardScaler().fit_transform(data)
+def load_model():
+  with open('clustering/fcm_model.pkl', 'rb') as f:
+    cntr, scaler = pickle.load(f)
+  return cntr, scaler
 
-    # Previsão
-    distances = np.linalg.norm(centros[:, None] - scaled_data.T, axis=0)
-    cluster = np.argmin(distances)
-    
-    segmentos = ['Gamer', 'Profissional', 'Estudante', 'Ocasional', 'Tecnológico']
-    
-    return segmentos[cluster]
+# Função de predição para identificar o segmento
+
+
+def predict_segment(produtos):
+  # Preencher com zeros para garantir que tenhamos 10 produtos
+  produtos_completos = produtos + [0] * (10 - len(produtos))
+
+  # Carregar o modelo treinado e o scaler
+  cntr, scaler = load_model()
+
+  # Escalar os dados de entrada
+  scaled_data = scaler.transform([produtos_completos])
+
+  # Calcular as distâncias entre o cliente e os centros dos clusters
+  distancias = np.linalg.norm(scaled_data - cntr, axis=1)
+
+  # Identificar o cluster mais próximo
+  segmento = np.argmin(distancias)
+
+  # Definindo os nomes dos clusters
+  clusters = ['Gamer', 'Escritório', 'Desenvolvedor', 'Designer', 'Casual']
+
+  return clusters[segmento]
