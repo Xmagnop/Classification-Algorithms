@@ -14,7 +14,7 @@ def load_model():
 
 
 def predict_segment(produtos):
-  # Preencher com zeros para garantir que tenhamos 10 produtos
+  # Preencher com zeros para garantir que tenhamos 10 features
   produtos_completos = produtos + [0] * (10 - len(produtos))
 
   # Carregar o modelo treinado e o scaler

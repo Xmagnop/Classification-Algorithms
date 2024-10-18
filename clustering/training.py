@@ -18,7 +18,7 @@ def train_fuzzy_cmeans(data):
   scaler = StandardScaler()
   scaled_data = scaler.fit_transform(data)
 
-  num_clusters = 5  # Definindo 5 clusters, por exemplo
+  num_clusters = 5  # Definindo 5 clusters
   cntr, u, u0, d, jm, p, fpc = cmeans(
       scaled_data.T, num_clusters, 2, error=0.005, maxiter=1000)
 
