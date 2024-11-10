@@ -30,10 +30,7 @@ A aplicação consiste em duas partes principais:
 ├── data
 │   └── compras.csv          # Dados fictícios de compras para o treinamento
 ├── static
-│   ├── css
-│   │   └── styles.css       # Estilos para o frontend
-│   └── js
-│       └── script.js        # Funções de manipulação do carrinho no frontend
+│   └── styles.css           # Estilos para o frontend
 ├── templates
 │   └── index.html           # Interface principal do cliente
 └── README.md                # Documentação do projeto
