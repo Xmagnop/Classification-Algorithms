@@ -1,6 +1,6 @@
 # Classification-Algorithms
 
-Esta aplicação utiliza o algoritmo de Fuzzy C-Means para realizar a segmentação de clientes com base em suas compras de produtos específicos. A aplicação tem uma interface onde o cliente pode montar um carrinho de compras e, ao finalizar a compra, a aplicação gera uma segmentação com base nos produtos selecionados. O modelo de Fuzzy C-Means foi treinado previamente em dados fictícios e os pesos salvos desse modelo são utilizados para gerar os segmentos no frontend.
+O intuito deste repositório é o projeto da matéria de Tópicos avançados em inteligências computacional, dessa maneira dentre os arquivos estão as apresentações e a nossa aplicação utilizando o algoritmo de Fuzzy C-Means para realizar a segmentação de clientes com base em suas compras de produtos específicos. A aplicação tem uma interface onde o cliente pode montar um carrinho de compras e, ao finalizar a compra, a aplicação gera uma segmentação com base nos produtos selecionados. O modelo de Fuzzy C-Means foi treinado previamente em dados fictícios e os pesos salvos desse modelo são utilizados para gerar os segmentos no frontend.
 
 ## Funcionamento
 
@@ -52,8 +52,6 @@ python app.py
 ```
 
 ## Uso Da Aplicação do Front
-
-Uso da Aplicação
 
 - Catálogo e Carrinho de Compras:
   - A interface exibe um catálogo com produtos como Mouse, Teclado, Cadeira, Monitor, etc.
