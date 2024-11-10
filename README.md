@@ -6,9 +6,9 @@ Esta aplicação utiliza o algoritmo de Fuzzy C-Means para realizar a segmentaç
 
 A aplicação consiste em duas partes principais:
 
-    - Treinamento e Armazenamento do Modelo: Um modelo de Fuzzy C-Means é treinado usando dados simulados de compras. Os centros dos clusters, que representam os pesos de cada produto em relação aos segmentos identificados, são salvos para uso posterior. Esses centros são fundamentais para identificar o segmento de um cliente a partir dos produtos em seu carrinho.
+- Treinamento e Armazenamento do Modelo: Um modelo de Fuzzy C-Means é treinado usando dados simulados de compras. Os centros dos clusters, que representam os pesos de cada produto em relação aos segmentos identificados, são salvos para uso posterior. Esses centros são fundamentais para identificar o segmento de um cliente a partir dos produtos em seu carrinho.
 
-    - Predição do Segmento no Frontend: A interface web permite que o usuário monte um carrinho com diversos produtos. Ao finalizar a compra, o backend utiliza os pesos salvos do modelo treinado para comparar o carrinho com os segmentos definidos. Essa comparação gera o segmento do cliente, que é então retornado e exibido para o usuário.
+- Predição do Segmento no Frontend: A interface web permite que o usuário monte um carrinho com diversos produtos. Ao finalizar a compra, o backend utiliza os pesos salvos do modelo treinado para comparar o carrinho com os segmentos definidos. Essa comparação gera o segmento do cliente, que é então retornado e exibido para o usuário.
 
 ## Tecnologias Utilizadas
 
@@ -55,10 +55,10 @@ python app.py
 
 Uso da Aplicação
 
-    - Catálogo e Carrinho de Compras:
-        A interface exibe um catálogo com produtos como Mouse, Teclado, Cadeira, Monitor, etc.
-        O usuário pode adicionar produtos ao carrinho, ver os itens e suas quantidades, podendo adicionar quantidades adicionais de um mesmo produto.
+- Catálogo e Carrinho de Compras:
+  - A interface exibe um catálogo com produtos como Mouse, Teclado, Cadeira, Monitor, etc.
+  - O usuário pode adicionar produtos ao carrinho, ver os itens e suas quantidades, podendo adicionar quantidades adicionais de um mesmo produto.
 
-    - Finalizar Compra e Ver Segmento:
-        Ao finalizar a compra, o frontend envia os produtos do carrinho para o backend, onde o modelo Fuzzy C-Means realiza a segmentação.
-        O backend utiliza o modelo treinado para determinar a probabilidade de associação do cliente a cada segmento, considerando os produtos e suas respectivas quantidades.
+- Finalizar Compra e Ver Segmento:
+  - Ao finalizar a compra, o frontend envia os produtos do carrinho para o backend, onde o modelo Fuzzy C-Means realiza a segmentação.
+  - O backend utiliza o modelo treinado para determinar a probabilidade de associação do cliente a cada segmento, considerando os produtos e suas respectivas quantidades.
